@@ -1,0 +1,46 @@
+schema: spec-driven
+context: |
+  Sistema Greenfield de Tickets de Soporte Técnico de Sistemas.
+  Backend: Node.js con Express y ORM Prisma.
+  Frontend: React con Vite y componentes modernos estilizados con Tailwind CSS.
+  Base de Datos: MySQL 8.0 corriendo localmente en XAMPP (localhost:3306).
+  Autenticación: API de Google (Google OAuth 2.0 / JWT).
+  Testing: Vitest y Supertest.
+  Idioma de los artefactos: Español.
+rules:
+  specs:
+    - Escribir los requisitos funcionales en notación EARS y escenarios Given-When-Then.
+  design:
+    - El esquema relacional debe soportar usuarios (Solicitantes y Operadores) y tickets con estados.
+  tasks:
+    - "Aplicar Test-Driven Generation (TDG): escribir siempre los tests antes del código de producción."
+# Project context (optional)
+# Add only constraints that should guide OpenSpec artifacts and workflows.
+# Include constraints an agent cannot infer by reading the code.
+# Keep general project documentation and discoverable codebase facts out.
+# Example:
+#   context: |
+#     Designs and tasks must cover Windows, macOS, and Linux
+#     Write all artifacts in Spanish
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always state what is out of scope
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing
