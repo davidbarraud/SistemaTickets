@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SOLICITANTE
+  OPERADOR
+}
+
+enum TicketStatus {
+  ABIERTO
+  EN_PROGRESO
+  RESUELTO
+  CERRADO
+}
+
+// IMPORTANTE: el orden de declaración define el orden por prioridad (MySQL ordena los ENUM
+// por su índice). No reordenar: GET /api/tickets?sort=priority depende de BAJA < MEDIA < ALTA < URGENTE.
+enum TicketPriority {
+  BAJA
+  MEDIA
+  ALTA
+  URGENTE
+}
+
+enum TicketCategory {
+  HARDWARE
+  SOFTWARE
+  RED
+  ACCESOS
+  OTRO
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique @db.VarChar(254)
+  name       String   @db.VarChar(200)
+  pictureUrl String?  @db.VarChar(1024)
+  role       UserRole @default(SOLICITANTE)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  requestedTickets Ticket[]  @relation("TicketRequester")
+  assignedTickets  Ticket[]  @relation("TicketAssignee")
+  comments         Comment[]
+}
+
+model Ticket {
+  id             Int            @id @default(autoincrement())
+  title          String         @db.VarChar(150)
+  description    String         @db.Text
+  status         TicketStatus   @default(ABIERTO)
+  priority       TicketPriority @default(MEDIA)
+  category       TicketCategory @default(OTRO)
+  requesterId    Int
+  assigneeId     Int?
+  resolutionNote String?        @db.Text
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  startedAt      DateTime?
+  resolvedAt     DateTime?
+  closedAt       DateTime?
+
+  requester User      @relation("TicketRequester", fields: [requesterId], references: [id])
+  assignee  User?     @relation("TicketAssignee", fields: [assigneeId], references: [id])
+  comments  Comment[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([requesterId])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  ticketId  Int
+  authorId  Int
+  body      String   @db.VarChar(2000)
+  createdAt DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  author User   @relation(fields: [authorId], references: [id])
+
+  @@index([ticketId, createdAt])
+}

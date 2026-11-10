@@ -147,3 +147,11 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# --- Proyecto sistema-tickets-soporte ---
+# (dependencias, builds, coverage, logs y .env ya están cubiertos arriba;
+#  .env.example se versiona como plantilla sin secretos)
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
